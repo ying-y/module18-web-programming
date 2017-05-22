@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Exercise 2</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body class="container">
+
+    <h1>Cut-Out Art</h1>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width=600 height=400>
+
+      <path id="pathA" d="M240,280 A 60,60 0 0,0 360,280" fill="#bd250d" />
+
+      <rect x=0 y=0 width=600 height=400 />
+
+      <circle id="circleA" cx=225 cy=130 r=100 />
+      <circle id="circleB" cx=0 cy=0 r=100 />
+
+      <path d="M150,140 A 90,90 0 0,0 150,330 z" />
+      <path d="M450,140 A 90,90 0 1,1 450,330 z" />
+
+      <g id="group1">
+        <circle cx=225 cy=110 r=50 />
+        <circle cx=375 cy=110 r=50 />
+        <g>
+          <circle cx=225 cy=120 r=20 />
+          <circle cx=375 cy=120 r=20 />
+        </g>
+      </g>
+
+      <circle id="circleC" cx=300 cy=255 r=100 fill='#c0c0c0' style='opacity:0;'/>
+
+      <rect x=200 y=255 width=200 height=200 />
+    </svg>
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="exercise.js"></script>
+</body>
+</html>
