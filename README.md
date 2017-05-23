@@ -322,9 +322,64 @@ Calling any of these methods on a selection with multiple elements (e.g., from `
 
 
 ## User Events
-<!-- //event-based programming / listeners
-//.on('click') and callbacks -->
+In order to make our page **interactive** (that is, able to change in response to user actions), we need to be able to respond to _user events_. Whenever a user interacts with a computer, the operating system announces that interaction as an **event**&mdash;the _event_ of a button being clicked, the _event_ of the mouse being moved, the _event_ of a keyboard key being pressed, etc. These events are **broadcast** to the entire system, allowing any application (including the browser) to "respond" the occurance of the event, such as by executing a particular JavaScript function.
 
+Thus in order to respond to user actions (and the _events_ those actions generate), we need to define a function that will be executed **when the event occurs**. We will define a function as normal, but the function will not get called by us as a particular step in our script. Instead, the function we specify will be executed _by the system_ when an event occurs, which will be at some indeterminate time in the future. This process is known as [event-driven programming](https://en.wikipedia.org/wiki/Event-driven_programming). It is also an example of <a href="https://en.wikipedia.org/wiki/Asynchrony_(computer_programming)">**asynchronous programming**</a>: in which statements are not executed in a single order one after another ("synchronously"), but may occur "out of order" or even at the same time!
+
+In order for our script to respond to user events, we need to _register an event listener_. This is a bit like following someone on social media: we specify that we want to "listen" for updates from that person, and what we want to do when we "hear" some news from that person.
+
+- Specifying that you want Slack to notify you when your name is mentioned is another good metaphor!
+
+We can register event listeners using D3 by calling the **`on()`** method on an selected element (e.g., that we want to do something _on_ hearing an event). This method takes two arguments: a string representing what kind of event we want to listen for, and a _callback function_ to execute when we hear that event:
+
+```js
+var button = d3.select('button'); //get a reference to the element we want to "listen" to
+button.on('click', myCallback);  //register a listener for 'click' events
+```
+
+- When the button is clicked by the user, it will "shout" out a `'click'` event ("I was clicked! I was clicked!"). Because we have set up a listener (an alert/notification) for such an occurence, our script will be able to do something&mdash;and that something that we will do is run the specified callback function.
+
+- Note that this listener _only_ applies to that button&mdash;if we wanted to respond to a different button, we'd need to register a separate listener!
+
+- There are numerous different events we can listen for, including `'dblclick'` (double-click), `'keydown'` (keyboard key is pressed), `'hover'` (mouse "hovers" over the element), etc. See <https://developer.mozilla.org/en-US/docs/Web/Events> for a complete list of browser-supported events.
+
+Note that it is _much_ more common to use an _anonymous function_ as the callback:
+
+```js
+var button = d3.select('button');
+button.on('click', function() {
+    //do something here
+    console.log("You clicked me!");
+});
+```
+
+If we want to know more details about the event (e.g., where the user clicked with the mouse, _which_ button was clicked), we can access the [`d3.event`](https://github.com/d3/d3-selection#event) variable, which is an object with properties about the _current_ event.
+
+Note that these event callback functions can occur repeatedly, over and over again (e.g., every time we click the button). This makes them potentially act a bit like the body of a `while` loop. However, because these callbacks are _functions_ any variables defined within them are **scoped** to that function, and will not be available on subsequent executions. Thus if you want to keep track of some additional information (e.g., how many times the button was clicked), you will need to use a **global** variable declared outside of the function. Such variables can be used to represent the **state** (situation) of the program, which can then be used to determine what behavior to perform when an event occurs, following the below pattern:
+
+```
+# pseudocode
+WHEN an event occurs {
+   check the STATE of the program;
+   DECIDE what to do based on that state;
+   UPDATE the state as necessary for the next event;
+}
+```
+
+For example:
+
+```js
+var clickCount = 0; //keep track of the "state"
+d3.select('button').on('click', function() {
+    if(clickCount > 10){ //decide what to do
+        console.log("I think you've had enough");
+    }
+    else {
+        clickCount++; //change state (+1)
+        console.log('You clicked me!');
+    }
+});
+```
 
 ## AJAX
 <!-- //what is it? Having our program send HTTP requests!
